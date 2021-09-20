@@ -6,7 +6,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({isGlobal: true}), MongooseModule.forRoot(process.env.URIDB, 
+  imports: [ConfigModule.forRoot({isGlobal: true, envFilePath: './env/.env'}), MongooseModule.forRoot(process.env.URIDB, 
     {useCreateIndex: true,
       useFindAndModify: true,
       useNewUrlParser: true,
