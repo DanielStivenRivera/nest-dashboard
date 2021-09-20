@@ -1,14 +1,16 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateUserDTO, LoginUserDTO } from 'src/dto/user.dto';
+import { CreateUserDTO} from 'src/dto/user.dto';
 import { User, UserDocument } from 'src/schemas/user.schema';
 import * as bcrypt from 'bcrypt';
+import { Task, TaskDocument } from 'src/schemas/task.schema';
+import { CreateTaskDTO } from 'src/dto/task.dto';
 
 @Injectable()
 export class UserService {
 
-    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>, @InjectModel(Task.name) private taskModel: Model<TaskDocument>) {}
 
     async CreateUser(createUserDTO: CreateUserDTO) {
 
@@ -46,5 +48,37 @@ export class UserService {
         }
         return user;
     }
+
+    async CreateTask(createTaskDTO: CreateTaskDTO) {
+        const task = new this.taskModel(createTaskDTO);
+        return await task.save();
+    }
+
+    async DeleteTask(taskId: string) {
+        const task = await this.taskModel.deleteOne({_id: taskId});
+        if(task) {
+            return {status: 'deleted'}
+        }
+        return {status: 'not deleted'}
+    }
+
+    async GetUserTasks(userId: string) {
+        const tasks = await this.taskModel.find({userId: userId});
+        return tasks;
+    }
+
+    async GetTask(taskId: string) {
+        const task = await this.taskModel.findById(taskId);
+        return task;
+    } 
+
+    async UpdateTask(taskId: string, createTaskDTO: CreateTaskDTO) {
+        const task = await this.taskModel.findByIdAndUpdate(taskId, createTaskDTO, {new: true});
+        if(!task) {
+            throw new HttpException('task not updated', HttpStatus.NOT_MODIFIED);
+        }
+        return {status: 'modified', code: 202}
+    }
+
 
 }

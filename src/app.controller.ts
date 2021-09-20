@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth/auth.service';
 import { JwtGuard } from './auth/jwt-auth.guard';
 import { LocalAuthGuard } from './auth/local-auth.guard';
+import { CreateTaskDTO } from './dto/task.dto';
 import { CreateUserDTO, LoginUserDTO } from './dto/user.dto';
 import { UserService } from './user/user.service';
 
@@ -28,6 +29,36 @@ export class AppController {
   @Get()
   Home() {
     return 'Dashboard backend'
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('profile/:id/tasks')
+  getUserTasks(@Param('id') id: string) {
+    return this.userService.GetUserTasks(id);
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('task/:id')
+  GetTask(@Param('id') id : string) {
+    return this.userService.GetTask(id);
+  }
+
+  @UseGuards(JwtGuard)
+  @Delete('tasks/:id')
+  DeleteTask(@Param('id') id : string) {
+    return this.userService.DeleteTask(id);
+  }
+
+  @UseGuards(JwtGuard)
+  @Post('task/create')
+  CreateTask(@Body() createTaskDTO: CreateTaskDTO) {
+    return this.userService.CreateTask(createTaskDTO);
+  }
+
+  @UseGuards(JwtGuard)
+  @Post('task/:id')
+  UpdateTask(@Param('id') id: string, @Body() createTaskDTO: CreateTaskDTO) {
+    return this.userService.UpdateTask(id, createTaskDTO);
   }
 
 }
