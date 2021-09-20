@@ -1,3 +1,8 @@
+<h1> to run in localhost you need put .env file into env folder </h1>
+<h2>into .env file are necesary the next lines</h2>
+<p> PORT </p>
+<p> URIDB="your mongo URI" </p>
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
