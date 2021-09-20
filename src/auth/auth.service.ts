@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoginUserDTO } from 'src/dto/user.dto';
 import { UserDocument } from 'src/schemas/user.schema';
 import * as bcrypt from 'bcrypt';
@@ -23,7 +23,7 @@ export class AuthService {
             const payload = { id: user._id, email: user.email};
             return {token: this.jwtService.sign(payload)}
         }
-        return null;
+        throw new UnauthorizedException();
         
     }
 
