@@ -1,6 +1,6 @@
 <h1> to run in localhost you need put .env file into env folder </h1>
 <h2>into .env file are necesary the next lines</h2>
-<p> PORT </p>
+<p> PORT="put port number here without double quotation marks" </p>
 <p> URIDB="your mongo URI" </p>
 
 <p align="center">
