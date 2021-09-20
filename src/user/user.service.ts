@@ -13,14 +13,17 @@ export class UserService {
     async CreateUser(createUserDTO: CreateUserDTO) {
 
         const userDB = await this.userModel.findOne({email: createUserDTO.email});
-
-        if(userDB) {
-            throw new HttpException('user already exists', HttpStatus.CONFLICT);
-        }
-        createUserDTO.password = await bcrypt.hash(createUserDTO.password, 15);
-        const user = new this.userModel(createUserDTO);
+        console.log('user not exists');
+        if(!userDB) {
+            console.log('user not exists');
+            createUserDTO.password = await bcrypt.hash(createUserDTO.password, 15);
+            const user = new this.userModel(createUserDTO);
         
-        return await user.save();
+            return await user.save();
+            
+        }
+        throw new HttpException('user already exists', HttpStatus.CONFLICT);
+        
     }
 
     async getUserByEmail(email: string) {
